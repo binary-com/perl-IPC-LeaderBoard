@@ -16,6 +16,21 @@ our $VERSION = '0.01_1';
 
 IPC::LeaderBoard - fast per-symbol online get/update information
 
+=head1 VERSION
+
+0.01_1
+
+=head1 STATUS
+
+=begin HTML
+
+<p>
+    <a href="https://travis-ci.org/binary-com/perl-IPC-LeaderBoard"><img src="https://travis-ci.org/binary-com/perl-IPC-LeaderBoard.svg" /></a>
+</p>
+
+=end HTML
+
+
 =head1 SYNOPSIS
 
     use IPC::LeaderBoard;

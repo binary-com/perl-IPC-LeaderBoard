@@ -4,7 +4,7 @@ IPC::LeaderBoard - fast per-symbol online get/update information
 
 # VERSION
 
-0.01\_1
+0.01
 
 # STATUS
 
@@ -176,7 +176,7 @@ binary.com, `<perl at binary.com>`
 # BUGS
 
 Please report any bugs or feature requests to
-[https://github.com/binary-com/perl-CSV-HistoryPlayer/issues](https://github.com/binary-com/perl-CSV-HistoryPlayer/issues).
+[https://github.com/binary-com/perl-IPC-LeaderBoard/issues](https://github.com/binary-com/perl-IPC-LeaderBoard/issues).
 
 # LICENSE AND COPYRIGHT
 

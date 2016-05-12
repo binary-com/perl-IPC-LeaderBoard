@@ -10,7 +10,7 @@ use Moo;
 use Path::Tiny;
 use namespace::clean;
 
-our $VERSION = '0.01_1';
+our $VERSION = '0.01';
 
 =head1 NAME
 
@@ -18,7 +18,7 @@ IPC::LeaderBoard - fast per-symbol online get/update information
 
 =head1 VERSION
 
-0.01_1
+0.01
 
 =head1 STATUS
 
@@ -378,7 +378,7 @@ binary.com, C<< <perl at binary.com> >>
 =head1 BUGS
 
 Please report any bugs or feature requests to
-L<https://github.com/binary-com/perl-CSV-HistoryPlayer/issues>.
+L<https://github.com/binary-com/perl-IPC-LeaderBoard/issues>.
 
 =head1 LICENSE AND COPYRIGHT
 

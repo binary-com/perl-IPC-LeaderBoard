@@ -1,6 +1,7 @@
 sudo: false
 language: perl
 perl:
+    - "5.24"
     - "5.22"
     - "5.20"
     - "5.18"
@@ -9,6 +10,11 @@ perl:
     - "5.12"
     - "5.10"
 before_install:
-    - "cpanm ."
+    - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
+    - source ~/travis-perl-helpers/init
+    - build-perl
+    - perl -V
+    - "cpanm -n ."
 script:
     perl Makefile.PL && make test
+

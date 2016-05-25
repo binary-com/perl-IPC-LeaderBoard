@@ -14,7 +14,7 @@ before_install:
     - source ~/travis-perl-helpers/init
     - build-perl
     - perl -V
-    - "cpanm ."
+    - "cpanm -n ."
 script:
     perl Makefile.PL && make test
 

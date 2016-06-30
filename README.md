@@ -4,7 +4,7 @@ IPC::LeaderBoard - fast per-symbol online get/update information
 
 # VERSION
 
-0.01
+0.02
 
 # STATUS
 

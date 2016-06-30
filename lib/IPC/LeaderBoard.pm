@@ -10,7 +10,7 @@ use Moo;
 use Path::Tiny;
 use namespace::clean;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 NAME
 
@@ -18,7 +18,7 @@ IPC::LeaderBoard - fast per-symbol online get/update information
 
 =head1 VERSION
 
-0.01
+0.02
 
 =head1 STATUS
 

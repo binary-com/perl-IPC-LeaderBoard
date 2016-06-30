@@ -343,17 +343,23 @@ sub update {
         scope_guard { $sb->decr($idx, 0) };
 
         # now we hold the record, nobody else can update it
-        my $actual_generation = $sb->get($idx, $self->_generation_idx);
-        if ($actual_generation == $self->_last_generation) {
+        # atomically increase generation and read it's value.
+        # The simple $sb->get(...) cannot be used, because it does not guarantees
+        # atomicity, i.e. slot re-write is possible due to L1/L2 caches in CPU
+        my $actual_generation = $sb->incr($idx, $self->_generation_idx);
+        if ($actual_generation == $self->_last_generation + 1) {
             # now we are sure, that nobody else updated the record since our last read
             # so we can safely update it
 
             # +1 because the 1st field is spinlock
             $sb->set($idx, $_ + 1, $values->[$_]) for (0 .. @$values - 1);
-            # increment the generation field
-            $sb->incr($idx, $self->_generation_idx);
             # success
             $operation_result = 1;
+        } else {
+            # Ooops! Somebody else just has updated the record, meaning that
+            # our decision to write record is invalid, roll-back generation
+            # increment
+            $sb->decr($idx, $self->_generation_idx);
         }
     }
 

@@ -10,7 +10,7 @@ use Moo;
 use Path::Tiny;
 use namespace::clean;
 
-our $VERSION = '0.01_1';
+our $VERSION = '0.02';
 
 =head1 NAME
 
@@ -18,7 +18,7 @@ IPC::LeaderBoard - fast per-symbol online get/update information
 
 =head1 VERSION
 
-0.01_1
+0.02
 
 =head1 STATUS
 
@@ -342,8 +342,11 @@ sub update {
         # release the lock at the end of the scope
         scope_guard { $sb->decr($idx, 0) };
 
-        # now we hold the record, nobody else can update it
-        my $actual_generation = $sb->get($idx, $self->_generation_idx);
+        # now we hold the record, nobody else can update it.
+        # Atomically read generation value via increment it to zero.
+        # The simple $sb->get(...) cannot be used, because it does not guarantees
+        # atomicity, i.e. slot re-write is possible due to L1/L2 caches in CPU
+        my $actual_generation = $sb->incr($idx, $self->_generation_idx, 0);
         if ($actual_generation == $self->_last_generation) {
             # now we are sure, that nobody else updated the record since our last read
             # so we can safely update it
@@ -378,7 +381,7 @@ binary.com, C<< <perl at binary.com> >>
 =head1 BUGS
 
 Please report any bugs or feature requests to
-L<https://github.com/binary-com/perl-CSV-HistoryPlayer/issues>.
+L<https://github.com/binary-com/perl-IPC-LeaderBoard/issues>.
 
 =head1 LICENSE AND COPYRIGHT
 

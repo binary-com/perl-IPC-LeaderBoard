@@ -56,7 +56,7 @@ IPC::LeaderBoard - fast per-symbol online get/update information
 
     # update shared integers with values 1,2,3,4 and 0-th private integer
     # with value 6
-    my $success = $leader_board->update(0, [1, 2, 3, 4], 0 => 6, 1 => 8)
+    my $success = $leader_board->update(0, [1, 2, 3, 4], 0 => 6, 1 => 8);
 
     # $shared = [1, 2, 3, 4], $private = [6, 8]
     ($shared, $private) = $leader_board->read_slot(0);
@@ -65,7 +65,7 @@ IPC::LeaderBoard - fast per-symbol online get/update information
     $leader_board->update(0, 1 => 2);
 
     # update just shared values of 0-th slot
-    my $success = $leader_board->update(0, [1, 2, 3, 4]);
+    $success = $leader_board->update(0, [1, 2, 3, 4]);
 
 =head1 DESCRIPTION
 
@@ -259,7 +259,7 @@ sub BUILD {
         # didn't accquired the exclusive lock, i.e. no master
         flock($fd, LOCK_SH | LOCK_NB)
             && die("LeaderBoard ($filename) is abandoned, cannot attach to it (shared lock obtained)");
-        my ($sb, $nslots, $slotsize, $extra) = IPC::ScoreBoard->open($filename);
+        my ($sb, $nslots, $slotsize) = IPC::ScoreBoard->open($filename);
         # just additional check, that providers/symbols information is actual
         my $declared_size = $self->slot_shared_size + $self->slot_private_size + 2;
         die("number of slots mismatch") unless $nslots == $self->n_slots;

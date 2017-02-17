@@ -196,6 +196,8 @@ loud exceptions; so, the next read-update cycle might be successful, but
 probably, the updated values are already correct, so, no immediate update
 would occur.
 
+=for Pod::Coverage BUILD DEMOLISH attach create mmaped_file n_slots read_slot slot_private_size slot_shared_size
+
 =cut
 
 has mmaped_file => (

@@ -10,7 +10,7 @@ use Moo;
 use Path::Tiny;
 use namespace::clean;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 NAME
 
@@ -373,8 +373,6 @@ sub update {
 
     return $operation_result;
 }
-
-
 
 =head1 AUTHOR
 

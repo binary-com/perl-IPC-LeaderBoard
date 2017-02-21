@@ -10,7 +10,7 @@ use Moo;
 use Path::Tiny;
 use namespace::clean;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 NAME
 
@@ -56,7 +56,7 @@ IPC::LeaderBoard - fast per-symbol online get/update information
 
     # update shared integers with values 1,2,3,4 and 0-th private integer
     # with value 6
-    my $success = $leader_board->update(0, [1, 2, 3, 4], 0 => 6, 1 => 8)
+    my $success = $leader_board->update(0, [1, 2, 3, 4], 0 => 6, 1 => 8);
 
     # $shared = [1, 2, 3, 4], $private = [6, 8]
     ($shared, $private) = $leader_board->read_slot(0);
@@ -65,7 +65,7 @@ IPC::LeaderBoard - fast per-symbol online get/update information
     $leader_board->update(0, 1 => 2);
 
     # update just shared values of 0-th slot
-    my $success = $leader_board->update(0, [1, 2, 3, 4]);
+    $success = $leader_board->update(0, [1, 2, 3, 4]);
 
 =head1 DESCRIPTION
 
@@ -196,6 +196,8 @@ loud exceptions; so, the next read-update cycle might be successful, but
 probably, the updated values are already correct, so, no immediate update
 would occur.
 
+=for Pod::Coverage BUILD DEMOLISH attach create mmaped_file n_slots read_slot slot_private_size slot_shared_size
+
 =cut
 
 has mmaped_file => (
@@ -257,7 +259,7 @@ sub BUILD {
         # didn't accquired the exclusive lock, i.e. no master
         flock($fd, LOCK_SH | LOCK_NB)
             && die("LeaderBoard ($filename) is abandoned, cannot attach to it (shared lock obtained)");
-        my ($sb, $nslots, $slotsize, $extra) = IPC::ScoreBoard->open($filename);
+        my ($sb, $nslots, $slotsize) = IPC::ScoreBoard->open($filename);
         # just additional check, that providers/symbols information is actual
         my $declared_size = $self->slot_shared_size + $self->slot_private_size + 2;
         die("number of slots mismatch") unless $nslots == $self->n_slots;
@@ -372,8 +374,6 @@ sub update {
     return $operation_result;
 }
 
-
-
 =head1 AUTHOR
 
 binary.com, C<< <perl at binary.com> >>
@@ -382,46 +382,6 @@ binary.com, C<< <perl at binary.com> >>
 
 Please report any bugs or feature requests to
 L<https://github.com/binary-com/perl-IPC-LeaderBoard/issues>.
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright (C) 2016 binary.com
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of the the Artistic License (2.0). You may obtain a
-copy of the full license at:
-
-L<http://www.perlfoundation.org/artistic_license_2_0>
-
-Any use, modification, and distribution of the Standard or Modified
-Versions is governed by this Artistic License. By using, modifying or
-distributing the Package, you accept this license. Do not use, modify,
-or distribute the Package, if you do not accept this license.
-
-If your Modified Version has been derived from a Modified Version made
-by someone other than you, you are nevertheless required to ensure that
-your Modified Version complies with the requirements of this license.
-
-This license does not grant you the right to use any trademark, service
-mark, tradename, or logo of the Copyright Holder.
-
-This license includes the non-exclusive, worldwide, free-of-charge
-patent license to make, have made, use, offer to sell, sell, import and
-otherwise transfer the Package with respect to any patent claims
-licensable by the Copyright Holder that are necessarily infringed by the
-Package. If you institute patent litigation (including a cross-claim or
-counterclaim) against any party alleging that the Package constitutes
-direct or contributory patent infringement, then this Artistic License
-to you shall terminate on the date that such litigation is filed.
-
-Disclaimer of Warranty: THE PACKAGE IS PROVIDED BY THE COPYRIGHT HOLDER
-AND CONTRIBUTORS "AS IS' AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES.
-THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE, OR NON-INFRINGEMENT ARE DISCLAIMED TO THE EXTENT PERMITTED BY
-YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR
-CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR
-CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE,
-EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 =cut
 

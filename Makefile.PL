@@ -31,7 +31,8 @@ my %WriteMakefileArgs = (
     "IPC::Open3" => 0,
     "Test::CheckDeps" => "0.010",
     "Test::Fatal" => 0,
-    "Test::More" => "0.94"
+    "Test::More" => "0.94",
+    "Test::Warnings" => 0
   },
   "VERSION" => "0.03",
   "test" => {
@@ -53,6 +54,7 @@ my %FallbackPrereqs = (
   "Test::CheckDeps" => "0.010",
   "Test::Fatal" => 0,
   "Test::More" => "0.94",
+  "Test::Warnings" => 0,
   "namespace::clean" => 0
 );
 

@@ -12,6 +12,8 @@ use namespace::clean;
 
 our $VERSION = '0.03';
 
+my $max_lock_attempts = $ENV{IPC_LEADERBOARD_MAX_SPINLOCK_ATTEMPTS} // 10000;
+
 =head1 NAME
 
 IPC::LeaderBoard - fast per-symbol online get/update information
@@ -339,8 +341,16 @@ sub update {
     # updating shared values
     if ($values) {
         die("values size mismatch slot size") if @$values != $self->slot_shared_size;
+
         # obtain spin-lock
-        $sb->decr($idx, 0) until $sb->incr($idx, 0) == 1;
+        my $attempts = 0;
+        while($sb->incr($idx, 0) != 1) {
+            $sb->decr($idx, 0);
+            if (++$attempts > $max_lock_attempts) {
+                warn("failed to acquire spin lock for row $idx after $attempts attempts");
+                return 0;
+            }
+        }
         # release the lock at the end of the scope
         scope_guard { $sb->decr($idx, 0) };
 
@@ -366,7 +376,9 @@ sub update {
     if (%private_values) {
         my $idx_delta = $self->_generation_idx + 1;
         while (my ($private_idx, $value) = each %private_values) {
-            die("wrong private index") if $private_idx >= $self->slot_private_size;
+            if (($private_idx >= $self->slot_private_size) || ($private_idx < 0)) {
+                die("wrong private index");
+            }
             $sb->set($idx, $private_idx + $idx_delta, $value);
         }
     }

@@ -375,7 +375,8 @@ sub update {
     # updating private values
     if (%private_values) {
         my $idx_delta = $self->_generation_idx + 1;
-        while (my ($private_idx, $value) = each %private_values) {
+        for my $private_idx (keys %private_values) {
+            my $value = $private_values{$private_idx};
             if (($private_idx >= $self->slot_private_size) || ($private_idx < 0)) {
                 die("wrong private index");
             }

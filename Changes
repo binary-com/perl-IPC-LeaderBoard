@@ -1,4 +1,7 @@
 {{$NEXT}}
+  -  Additional runtime checks
+  -  Emit warning when failed to acquire spin lock after 10000 attempts
+     (befere that change it entered into endless loop aka live-lock)
 
 0.03      2017-02-21 02:13:25+00:00 UTC
   -  Switch to dzil

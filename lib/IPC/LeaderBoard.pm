@@ -10,7 +10,7 @@ use Moo;
 use Path::Tiny;
 use namespace::clean;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 my $max_lock_attempts = $ENV{IPC_LEADERBOARD_MAX_SPINLOCK_ATTEMPTS} // 10000;
 
@@ -344,7 +344,7 @@ sub update {
 
         # obtain spin-lock
         my $attempts = 0;
-        while($sb->incr($idx, 0) != 1) {
+        while ($sb->incr($idx, 0) != 1) {
             $sb->decr($idx, 0);
             if (++$attempts > $max_lock_attempts) {
                 warn("failed to acquire spin lock for row $idx after $attempts attempts");

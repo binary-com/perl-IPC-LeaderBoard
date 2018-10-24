@@ -1,4 +1,6 @@
 {{$NEXT}}
+  - Allow update of values if the number of values is less that
+    the defined slot size.
 
 0.04      2017-07-03 10:00:18+08:00 Asia/Kuala_Lumpur
   -  Additional runtime checks

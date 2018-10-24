@@ -340,7 +340,7 @@ sub update {
 
     # updating shared values
     if ($values) {
-        die("values size mismatch slot size") if @$values != $self->slot_shared_size;
+        die("values size is more than slot size") if @$values > $self->slot_shared_size;
 
         # obtain spin-lock
         my $attempts = 0;

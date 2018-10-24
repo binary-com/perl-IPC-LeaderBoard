@@ -152,16 +152,12 @@ subtest "edge-cases" => sub {
     );
 
     like(
-        exception { $slave_1->update(0, [1, 2, 3]) },
-        qr/values size mismatch slot size/,
+        exception { $slave_1->update(0, [1, 2, 3, 4, 5]) },
+        qr/values size is more than slot size/,
         "the code died in attempt to update shared datas with wrong vector size",
     );
 
-    like(
-        exception { $slave_1->update(0, [1, 2, 3, 4, 5]) },
-        qr/values size mismatch slot size/,
-        "the code died in attempt to update shared datas with wrong vector size",
-    );
+    ok $slave_1->update(0, [1,2,3]), 'update successful if value is less than slot shared size';
 
     # manually set spin lock to some value(5) (should be zero, by default)
     $slave_1->_score_board->set(0, 0, 5);
